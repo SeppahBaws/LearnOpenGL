@@ -35,7 +35,7 @@ float lastX = screenWidth / 2.0f;
 float lastY = screenHeight / 2.0f;
 bool firstMouse = true;
 
-bool tabKeyDown = false;
+bool gameModeKeyDown = false;
 
 float deltaTime = 0.0f; // Time between current frame and last frame
 float lastFrame = 0.0f; // Time of last frame
@@ -87,6 +87,8 @@ int main()
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO();
+	// Disable ImGui mouse by default
+	io.ConfigFlags |= ImGuiConfigFlags_NoMouse;
 	(void)io;
 
 	// Setup ImGui style
@@ -354,21 +356,28 @@ void processInput(GLFWwindow* window)
 		glfwSetWindowShouldClose(window, true);
 	}
 
-	if (glfwGetKey(window, GLFW_KEY_TAB) == GLFW_PRESS)
-		tabKeyDown = true;
+	if (glfwGetKey(window, GLFW_KEY_GRAVE_ACCENT) == GLFW_PRESS)
+		gameModeKeyDown = true;
 
-	if (glfwGetKey(window, GLFW_KEY_TAB) == GLFW_RELEASE && tabKeyDown)
+	if (glfwGetKey(window, GLFW_KEY_GRAVE_ACCENT) == GLFW_RELEASE && gameModeKeyDown)
 	{
-		tabKeyDown = false;
+		gameModeKeyDown = false;
 		if (glfwGetInputMode(window, GLFW_CURSOR) == GLFW_CURSOR_DISABLED)
 		{
+			// Re-enable the mouse
 			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+			ImGuiIO& io = ImGui::GetIO();
+			io.ConfigFlags &= ~ImGuiConfigFlags_NoMouse;
 		}
 		else
 		{
+			// Disable the mouse
 			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+			ImGuiIO& io = ImGui::GetIO();
+			io.ConfigFlags |= ImGuiConfigFlags_NoMouse;
 		}
-			
+
+		// Test with bitfields: https://repl.it/@seppedek/Bitfields
 	}
 
 	if (glfwGetInputMode(window, GLFW_CURSOR) == GLFW_CURSOR_DISABLED)
