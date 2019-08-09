@@ -27,6 +27,7 @@ public:
 	glm::mat4 GetViewMatrix();
 	float GetZoom() const { return m_Zoom; }
 	const glm::vec3& GetPosition() const { return m_Position; }
+	const glm::vec3& GetDirection() const { return m_Front; }
 
 	void ProcessKeyboard(CameraMovement direction, float deltaTime);
 	void ProcessMouseMovement(float xoffset, float yoffset, bool constrainPitch = true);

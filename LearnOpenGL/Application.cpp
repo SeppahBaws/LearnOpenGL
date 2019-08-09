@@ -1,4 +1,4 @@
-// TODO: continue from here: https://learnopengl.com/Lighting/Light-casters
+// TODO: continue from here: https://learnopengl.com/Lighting/Multiple-lights
 
 // ReSharper disable once CppUnusedIncludeDirective
 #include <vld.h>
@@ -150,6 +150,19 @@ int main()
 		-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f
 	};
 
+	glm::vec3 cubePositions[] = {
+		glm::vec3( 0.0f,  0.0f,  0.0f),
+		glm::vec3( 2.0f,  5.0f, -15.0f),
+		glm::vec3(-1.5f, -2.2f, -2.5f),
+		glm::vec3(-3.8f, -2.0f, -12.3f),
+		glm::vec3( 2.4f, -0.4f, -3.5f),
+		glm::vec3(-1.7f,  3.0f, -7.5f),
+		glm::vec3( 1.3f, -2.0f, -2.5f),
+		glm::vec3( 1.5f,  2.0f, -2.5f),
+		glm::vec3( 1.5f,  0.2f, -1.5f),
+		glm::vec3(-1.3f,  1.0f, -1.5f)
+	};
+
 	unsigned int cubeVAO, VBO;
 	glGenVertexArrays(1, &cubeVAO);
 	glGenBuffers(1, &VBO);
@@ -194,8 +207,6 @@ int main()
 	glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
 
 	// ImGui variables
-	bool show_demo_window = true;
-	bool show_another_window = false;
 	glm::vec3 clearColor(0.2f, 0.2f, 0.2f);
 
 	glm::vec3 lightColor = glm::vec3(1.0f, 1.0f, 1.0f);
@@ -221,7 +232,7 @@ int main()
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 
-		ImGui::ShowDemoWindow(&show_demo_window);
+		// ImGui::ShowDemoWindow(&show_demo_window);
 
 		{
 			ImGui::Begin("Shader Properties");
@@ -243,17 +254,27 @@ int main()
 			ImGui::End();
 		}
 
-
 		// Rendering
 		glClearColor(clearColor.r, clearColor.g, clearColor.b, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// render
+
+		// Light settings
 		lightingShader.Use();
-		lightingShader.SetVec3("light.position", lightPos);
+		
 		lightingShader.SetVec3("light.ambient", ambientColor);
 		lightingShader.SetVec3("light.diffuse", diffuseColor);
 		lightingShader.SetVec3("light.specular", 1.0f, 1.0f, 1.0f);
+
+		lightingShader.SetVec3("light.position", camera.GetPosition());
+		lightingShader.SetVec3("light.direction", camera.GetDirection());
+		lightingShader.SetFloat("light.cutOff", glm::cos(glm::radians(12.5f)));
+		lightingShader.SetFloat("light.outerCutOff", glm::cos(glm::radians(17.5f)));
+
+		lightingShader.SetFloat("light.constant", 1.0f);
+		lightingShader.SetFloat("light.linear", 0.09f);
+		lightingShader.SetFloat("light.quadratic", 0.032f);
 
 		glm::mat4 projection = glm::perspective(glm::radians(camera.GetZoom()), float(screenWidth) / float(screenHeight), 0.1f, 100.0f);
 		glm::mat4 view = camera.GetViewMatrix();
@@ -269,25 +290,39 @@ int main()
 		diffuseMap.Use(GL_TEXTURE0);
 		specularMap.Use(GL_TEXTURE1);
 
-		// Render cube
+		// Render 10 cubes
 		glBindVertexArray(cubeVAO);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
+		for (unsigned int i =  0; i < 10; i++)
+		{
+			glm::mat4 model = glm::mat4(1.0f);
+			model = glm::translate(model, cubePositions[i]);
+			float angle = 20.0f * i;
+			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+			lightingShader.SetMat4("model", model);
+		
+			glDrawArrays(GL_TRIANGLES, 0, 36);
+		}
+
+		// Render cube
+		// glBindVertexArray(cubeVAO);
+		// glDrawArrays(GL_TRIANGLES, 0, 36);
 
 
 		// render lamp object
-		lampShader.Use();
-		lampShader.SetMat4("projection", projection);
-		lampShader.SetMat4("view", view);
-		model = glm::mat4(1.0f);
-		model = glm::translate(model, lightPos);
-		model = glm::scale(model, glm::vec3(0.2f));
-		lampShader.SetMat4("model", model);
+		// now we're not rendering the light object, since we have a spotlight at the camera's position
+		// lampShader.Use();
+		// lampShader.SetMat4("projection", projection);
+		// lampShader.SetMat4("view", view);
+		// model = glm::mat4(1.0f);
+		// model = glm::translate(model, lightPos);
+		// model = glm::scale(model, glm::vec3(0.2f));
+		// lampShader.SetMat4("model", model);
+		//
+		// glBindVertexArray(lightVAO);
+		// glDrawArrays(GL_TRIANGLES, 0, 36);
 
-
-		ImGui::Render();
-		glBindVertexArray(lightVAO);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
 		// Draw ImGui at the end
+		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 		// Swap buffers and poll IO events
