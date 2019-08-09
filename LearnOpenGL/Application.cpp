@@ -239,28 +239,6 @@ int main()
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 
-		// ImGui::ShowDemoWindow(&show_demo_window);
-
-		// {
-		// 	ImGui::Begin("Shader Properties");
-		//
-		// 	ImGui::Text("Light Properties");
-		// 	ImGui::InputFloat3("Light Position", (float*)&lightPos);
-		// 	ImGui::ColorEdit3("Light Color", (float*)&lightColor);
-		// 	ImGui::ColorEdit3("Light Ambient", (float*)&ambientColor);
-		// 	ImGui::ColorEdit3("Light diffuse", (float*)&diffuseColor);
-		//
-		// 	ImGui::Spacing();
-		// 	ImGui::Spacing();
-		// 	ImGui::Spacing();
-		// 	ImGui::Spacing();
-		//
-		// 	ImGui::Text("Material Properties");
-		// 	ImGui::SliderFloat("Material Shininess", &matShininess, 1.0f, 200.0f);
-		//
-		// 	ImGui::End();
-		// }
-
 		// Rendering
 		glClearColor(clearColor.r, clearColor.g, clearColor.b, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -347,11 +325,6 @@ int main()
 			glDrawArrays(GL_TRIANGLES, 0, 36);
 		}
 
-		// Render cube
-		// glBindVertexArray(cubeVAO);
-		// glDrawArrays(GL_TRIANGLES, 0, 36);
-
-
 		// render lamp object
 		lampShader.Use();
 		lampShader.SetMat4("projection", projection);
@@ -366,7 +339,6 @@ int main()
 			lampShader.SetMat4("model", model);
 			glDrawArrays(GL_TRIANGLES, 0, 36);
 		}
-		
 
 		// Draw ImGui at the end
 		ImGui::Render();
