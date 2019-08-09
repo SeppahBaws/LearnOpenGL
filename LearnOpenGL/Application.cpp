@@ -1,4 +1,4 @@
-// TODO: continue from here: https://learnopengl.com/Lighting/Multiple-lights
+// TODO: continue from here: https://learnopengl.com/Model-Loading/Assimp
 
 // ReSharper disable once CppUnusedIncludeDirective
 #include <vld.h>
@@ -163,6 +163,13 @@ int main()
 		glm::vec3(-1.3f,  1.0f, -1.5f)
 	};
 
+	glm::vec3 pointLightPositions[] = {
+		glm::vec3(0.7f,  0.2f,  2.0f),
+		glm::vec3(2.3f, -3.3f, -4.0f),
+		glm::vec3(-4.0f,  2.0f, -12.0f),
+		glm::vec3(0.0f,  0.0f, -3.0f)
+	};
+
 	unsigned int cubeVAO, VBO;
 	glGenVertexArrays(1, &cubeVAO);
 	glGenBuffers(1, &VBO);
@@ -234,25 +241,25 @@ int main()
 
 		// ImGui::ShowDemoWindow(&show_demo_window);
 
-		{
-			ImGui::Begin("Shader Properties");
-
-			ImGui::Text("Light Properties");
-			ImGui::InputFloat3("Light Position", (float*)&lightPos);
-			ImGui::ColorEdit3("Light Color", (float*)&lightColor);
-			ImGui::ColorEdit3("Light Ambient", (float*)&ambientColor);
-			ImGui::ColorEdit3("Light diffuse", (float*)&diffuseColor);
-
-			ImGui::Spacing();
-			ImGui::Spacing();
-			ImGui::Spacing();
-			ImGui::Spacing();
-
-			ImGui::Text("Material Properties");
-			ImGui::SliderFloat("Material Shininess", &matShininess, 1.0f, 200.0f);
-
-			ImGui::End();
-		}
+		// {
+		// 	ImGui::Begin("Shader Properties");
+		//
+		// 	ImGui::Text("Light Properties");
+		// 	ImGui::InputFloat3("Light Position", (float*)&lightPos);
+		// 	ImGui::ColorEdit3("Light Color", (float*)&lightColor);
+		// 	ImGui::ColorEdit3("Light Ambient", (float*)&ambientColor);
+		// 	ImGui::ColorEdit3("Light diffuse", (float*)&diffuseColor);
+		//
+		// 	ImGui::Spacing();
+		// 	ImGui::Spacing();
+		// 	ImGui::Spacing();
+		// 	ImGui::Spacing();
+		//
+		// 	ImGui::Text("Material Properties");
+		// 	ImGui::SliderFloat("Material Shininess", &matShininess, 1.0f, 200.0f);
+		//
+		// 	ImGui::End();
+		// }
 
 		// Rendering
 		glClearColor(clearColor.r, clearColor.g, clearColor.b, 1.0f);
@@ -262,27 +269,64 @@ int main()
 
 		// Light settings
 		lightingShader.Use();
-		
-		lightingShader.SetVec3("light.ambient", ambientColor);
-		lightingShader.SetVec3("light.diffuse", diffuseColor);
-		lightingShader.SetVec3("light.specular", 1.0f, 1.0f, 1.0f);
+		lightingShader.SetVec3("viewPos", camera.GetPosition());
+		lightingShader.SetFloat("material.shininess", matShininess);
 
-		lightingShader.SetVec3("light.position", camera.GetPosition());
-		lightingShader.SetVec3("light.direction", camera.GetDirection());
-		lightingShader.SetFloat("light.cutOff", glm::cos(glm::radians(12.5f)));
-		lightingShader.SetFloat("light.outerCutOff", glm::cos(glm::radians(17.5f)));
+		// directional light
+		lightingShader.SetVec3("dirLight.direction", -0.2f, -1.0f, -0.3f);
+		lightingShader.SetVec3("dirLight.ambient", 0.05f, 0.05f, 0.05f);
+		lightingShader.SetVec3("dirLight.diffuse", 0.4f, 0.4f, 0.4f);
+		lightingShader.SetVec3("dirLight.specular", 0.5f, 0.5f, 0.5f);
 
-		lightingShader.SetFloat("light.constant", 1.0f);
-		lightingShader.SetFloat("light.linear", 0.09f);
-		lightingShader.SetFloat("light.quadratic", 0.032f);
+		// point light 1
+		lightingShader.SetVec3("pointLights[0].position", pointLightPositions[0]);
+		lightingShader.SetVec3("pointLights[0].ambient", 0.05f, 0.05f, 0.05f);
+		lightingShader.SetVec3("pointLights[0].diffuse", 0.8f, 0.8f, 0.8f);
+		lightingShader.SetVec3("pointLights[0].specular", 1.0f, 1.0f, 1.0f);
+		lightingShader.SetFloat("pointLights[0].constant", 1.0f);
+		lightingShader.SetFloat("pointLights[0].linear", 0.09);
+		lightingShader.SetFloat("pointLights[0].quadratic", 0.032);
+		// point light 2
+		lightingShader.SetVec3("pointLights[1].position", pointLightPositions[1]);
+		lightingShader.SetVec3("pointLights[1].ambient", 0.05f, 0.05f, 0.05f);
+		lightingShader.SetVec3("pointLights[1].diffuse", 0.8f, 0.8f, 0.8f);
+		lightingShader.SetVec3("pointLights[1].specular", 1.0f, 1.0f, 1.0f);
+		lightingShader.SetFloat("pointLights[1].constant", 1.0f);
+		lightingShader.SetFloat("pointLights[1].linear", 0.09);
+		lightingShader.SetFloat("pointLights[1].quadratic", 0.032);
+		// point light 3
+		lightingShader.SetVec3("pointLights[2].position", pointLightPositions[2]);
+		lightingShader.SetVec3("pointLights[2].ambient", 0.05f, 0.05f, 0.05f);
+		lightingShader.SetVec3("pointLights[2].diffuse", 0.8f, 0.8f, 0.8f);
+		lightingShader.SetVec3("pointLights[2].specular", 1.0f, 1.0f, 1.0f);
+		lightingShader.SetFloat("pointLights[2].constant", 1.0f);
+		lightingShader.SetFloat("pointLights[2].linear", 0.09);
+		lightingShader.SetFloat("pointLights[2].quadratic", 0.032);
+		// point light 4
+		lightingShader.SetVec3("pointLights[3].position", pointLightPositions[3]);
+		lightingShader.SetVec3("pointLights[3].ambient", 0.05f, 0.05f, 0.05f);
+		lightingShader.SetVec3("pointLights[3].diffuse", 0.8f, 0.8f, 0.8f);
+		lightingShader.SetVec3("pointLights[3].specular", 1.0f, 1.0f, 1.0f);
+		lightingShader.SetFloat("pointLights[3].constant", 1.0f);
+		lightingShader.SetFloat("pointLights[3].linear", 0.09);
+		lightingShader.SetFloat("pointLights[3].quadratic", 0.032);
+		// spotLight
+		lightingShader.SetVec3("spotLight.position", camera.GetPosition());
+		lightingShader.SetVec3("spotLight.direction", camera.GetDirection());
+		lightingShader.SetVec3("spotLight.ambient", 0.0f, 0.0f, 0.0f);
+		lightingShader.SetVec3("spotLight.diffuse", 1.0f, 1.0f, 1.0f);
+		lightingShader.SetVec3("spotLight.specular", 1.0f, 1.0f, 1.0f);
+		lightingShader.SetFloat("spotLight.constant", 1.0f);
+		lightingShader.SetFloat("spotLight.linear", 0.09);
+		lightingShader.SetFloat("spotLight.quadratic", 0.032);
+		lightingShader.SetFloat("spotLight.cutOff", glm::cos(glm::radians(12.5f)));
+		lightingShader.SetFloat("spotLight.outerCutOff", glm::cos(glm::radians(15.0f)));
+
 
 		glm::mat4 projection = glm::perspective(glm::radians(camera.GetZoom()), float(screenWidth) / float(screenHeight), 0.1f, 100.0f);
 		glm::mat4 view = camera.GetViewMatrix();
 		lightingShader.SetMat4("projection", projection);
 		lightingShader.SetMat4("view", view);
-		lightingShader.SetVec3("viewPos", camera.GetPosition());
-
-		lightingShader.SetFloat("material.shininess", matShininess);
 
 		glm::mat4 model = glm::mat4(1.0f);
 		lightingShader.SetMat4("model", model);
@@ -309,17 +353,20 @@ int main()
 
 
 		// render lamp object
-		// now we're not rendering the light object, since we have a spotlight at the camera's position
-		// lampShader.Use();
-		// lampShader.SetMat4("projection", projection);
-		// lampShader.SetMat4("view", view);
-		// model = glm::mat4(1.0f);
-		// model = glm::translate(model, lightPos);
-		// model = glm::scale(model, glm::vec3(0.2f));
-		// lampShader.SetMat4("model", model);
-		//
-		// glBindVertexArray(lightVAO);
-		// glDrawArrays(GL_TRIANGLES, 0, 36);
+		lampShader.Use();
+		lampShader.SetMat4("projection", projection);
+		lampShader.SetMat4("view", view);
+		
+		glBindVertexArray(lightVAO);
+		for (unsigned int i = 0; i < 4; i++)
+		{
+			model = glm::mat4(1.0f);
+			model = glm::translate(model, pointLightPositions[i]);
+			model = glm::scale(model, glm::vec3(0.2f));
+			lampShader.SetMat4("model", model);
+			glDrawArrays(GL_TRIANGLES, 0, 36);
+		}
+		
 
 		// Draw ImGui at the end
 		ImGui::Render();
