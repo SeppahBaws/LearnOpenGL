@@ -1,4 +1,4 @@
-// TODO: continue from here: https://learnopengl.com/Model-Loading/Assimp
+// TODO: continue from here: https://learnopengl.com/Model-Loading/Mesh
 
 // ReSharper disable once CppUnusedIncludeDirective
 #include <vld.h>
@@ -15,6 +15,8 @@
 #include <glm/matrix.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+
+#include <assimp/camera.h>
 
 #include "Shader.h"
 #include "Texture.h"
