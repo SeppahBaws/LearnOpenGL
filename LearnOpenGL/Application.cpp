@@ -1,4 +1,4 @@
-// TODO: continue from here: https://learnopengl.com/Model-Loading/Mesh
+// TODO: continue from here: https://learnopengl.com/Model-Loading/Model
 
 // ReSharper disable once CppUnusedIncludeDirective
 #include <vld.h>
