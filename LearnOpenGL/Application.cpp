@@ -2,7 +2,6 @@
 
 // ReSharper disable once CppUnusedIncludeDirective
 #include <vld.h>
-#include <iostream>
 
 #include "deps/imgui/imgui.h"
 #include "deps/imgui/imgui_impl_glfw.h"
@@ -16,7 +15,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include <assimp/camera.h>
+#include "helpers/Logger.h"
 
 #include "Shader.h"
 #include "Texture.h"
@@ -44,12 +43,14 @@ float lastFrame = 0.0f; // Time of last frame
 
 int main()
 {
+	Logger::Init();
+	
 	GLFWwindow* window;
 
 	// Initialize GLFW
 	if (!glfwInit())
 	{
-		std::cerr << "Failed to initialize GLFW!" << std::endl;
+		Logger::LogError("Failed to initialize GLFW!");
 		return -1;
 	}
 
@@ -64,7 +65,7 @@ int main()
 	window = glfwCreateWindow(screenWidth, screenHeight, "Hello World", nullptr, nullptr);
 	if (!window)
 	{
-		std::cerr << "Failed to create GLFW window!" << std::endl;
+		Logger::LogError("Failed to create GLFW window!");
 		glfwTerminate();
 		return -1;
 	}
@@ -80,7 +81,7 @@ int main()
 	// Initialize GLAD
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
-		std::cerr << "Failed to initialize GLAD!" << std::endl;
+		Logger::LogError("Failed to initialize GLAD!");
 		glfwTerminate();
 		return -1;
 	}
@@ -102,10 +103,14 @@ int main()
 
 	glEnable(GL_DEPTH_TEST);
 
-	std::cout << "OpenGL Info:" << std::endl;
-	std::cout << "  Vendor: " << glGetString(GL_VENDOR) << std::endl;
-	std::cout << "  Renderer: " << glGetString(GL_RENDERER) << std::endl;
-	std::cout << "  Version: " << glGetString(GL_VERSION) << std::endl;
+	std::stringstream ss;
+	ss << "--------------------------------\n";
+	ss << " OpenGL Info:\n";
+	ss << "   Vendor: " << glGetString(GL_VENDOR) << "\n";
+	ss << "   Renderer: " << glGetString(GL_RENDERER) << "\n";
+	ss << "   Version: " << glGetString(GL_VERSION) << "\n";
+	ss << "--------------------------------";
+	Logger::LogSuccess(ss.str());
 
 	float vertices[] = {
 		// positions          // normals           // texture coords

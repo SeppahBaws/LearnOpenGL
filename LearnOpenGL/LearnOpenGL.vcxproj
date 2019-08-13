@@ -87,6 +87,7 @@
     <ClCompile Include="deps\imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="deps\imgui\imgui_widgets.cpp" />
     <ClCompile Include="glad.c" />
+    <ClCompile Include="helpers\Logger.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="stb_image.cpp" />
@@ -109,6 +110,7 @@
     <ClInclude Include="deps\imgui\imstb_rectpack.h" />
     <ClInclude Include="deps\imgui\imstb_textedit.h" />
     <ClInclude Include="deps\imgui\imstb_truetype.h" />
+    <ClInclude Include="helpers\Logger.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="stb_image.h" />
