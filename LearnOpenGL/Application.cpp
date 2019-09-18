@@ -1,4 +1,4 @@
-// TODO: continue from here: https://learnopengl.com/Model-Loading/Model
+// TODO: continue from here: https://learnopengl.com/Advanced-OpenGL/Depth-testing
 
 // ReSharper disable once CppUnusedIncludeDirective
 #include <vld.h>
@@ -9,17 +9,15 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include "stb_image.h"
 #include <glm/glm.hpp>
-#include <glm/matrix.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
 #include "helpers/Logger.h"
 
 #include "Shader.h"
-#include "Texture.h"
 #include "Camera.h"
+#include "Model.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
@@ -207,12 +205,12 @@ int main()
 	glEnableVertexAttribArray(0);
 
 
+	// Our custom model that we want to draw
+	Model nanosuit("res/models/nanosuit/nanosuit.obj");
+	
 	// Create shader
 	Shader lightingShader("res/shaders/lit_vertex.glsl", "res/shaders/lit_fragment.glsl");
 	Shader lampShader("res/shaders/lit_vertex.glsl", "res/shaders/light_fragment.glsl");
-
-	Texture diffuseMap("res/textures/container2.png", TextureMode::PNG);
-	Texture specularMap("res/textures/container2_specular.png", TextureMode::PNG);
 
 	lightingShader.Use();
 	lightingShader.SetInt("material.diffuse", 0);
@@ -316,22 +314,8 @@ int main()
 		glm::mat4 model = glm::mat4(1.0f);
 		lightingShader.SetMat4("model", model);
 
-		diffuseMap.Use(GL_TEXTURE0);
-		specularMap.Use(GL_TEXTURE1);
-
-		// Render 10 cubes
-		glBindVertexArray(cubeVAO);
-		for (unsigned int i =  0; i < 10; i++)
-		{
-			glm::mat4 model = glm::mat4(1.0f);
-			model = glm::translate(model, cubePositions[i]);
-			float angle = 20.0f * i;
-			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-			lightingShader.SetMat4("model", model);
+		nanosuit.Draw(lightingShader);
 		
-			glDrawArrays(GL_TRIANGLES, 0, 36);
-		}
-
 		// render lamp object
 		lampShader.Use();
 		lampShader.SetMat4("projection", projection);

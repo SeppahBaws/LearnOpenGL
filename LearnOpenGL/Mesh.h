@@ -7,21 +7,23 @@
 
 class Shader;
 
-struct Vertex
-{
-	glm::vec3 m_position;
-	glm::vec3 m_normal;
-	glm::vec2 m_texCoords;
-};
-
-struct Texture
-{
-	unsigned int m_id;
-	std::string m_type;
-};
-
 class Mesh
 {
+public:
+	struct Vertex
+	{
+		glm::vec3 m_position;
+		glm::vec3 m_normal;
+		glm::vec2 m_texCoords;
+	};
+
+	struct Texture
+	{
+		unsigned int m_id;
+		std::string m_type;
+		std::string m_path;
+	};
+	
 public:
 	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures);
 

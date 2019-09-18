@@ -1,6 +1,4 @@
 # Directories
 .vs/
-Debug/
-Release/
-x64/
-
+bin/
+bin-int/
