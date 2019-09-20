@@ -111,7 +111,7 @@ Mesh Model::ProcessMesh(aiMesh* pMesh, const aiScene* pScene)
 
 	for (unsigned int i = 0; i < pMesh->mNumVertices; i++)
 	{
-		Mesh::Vertex vertex;
+		Mesh::Vertex vertex{};
 		// process vertex positions, normals and texture coordinates
 
 		glm::vec3 vector;
@@ -138,6 +138,7 @@ Mesh Model::ProcessMesh(aiMesh* pMesh, const aiScene* pScene)
 		}
 		else
 		{
+			Logger::LogWarning("Mesh: UV Coordinates not found! Defaulting to (0,0)");
 			vertex.m_texCoords = glm::vec2(0.0f, 0.0f);
 		}
 		
@@ -177,8 +178,8 @@ std::vector<Mesh::Texture> Model::LoadMaterialTextures(aiMaterial* pMaterial, ai
 		aiString string;
 		pMaterial->GetTexture(type, i, &string);
 
-		Logger::LogWarning("Textures:");
-		Logger::LogWarning(string.C_Str());
+		Logger::Log("Textures:");
+		Logger::Log(string.C_Str());
 		
 		bool skip = false;
 		for (unsigned int j = 0; j < m_TexturesLoaded.size(); j++)

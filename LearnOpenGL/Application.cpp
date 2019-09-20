@@ -25,6 +25,8 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void error_callback(int error, const char* description);
 void processInput(GLFWwindow* window);
 
+void CenterWindow(GLFWwindow* window, GLFWmonitor* monitor);
+
 int screenWidth = 1280;
 int screenHeight = 720;
 
@@ -35,6 +37,8 @@ float lastY = screenHeight / 2.0f;
 bool firstMouse = true;
 
 bool gameModeKeyDown = false;
+bool flashLightOn = false;
+bool flashLightKeyDown = false;
 
 float deltaTime = 0.0f; // Time between current frame and last frame
 float lastFrame = 0.0f; // Time of last frame
@@ -67,6 +71,10 @@ int main()
 		glfwTerminate();
 		return -1;
 	}
+
+	// Center the window
+	GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+	CenterWindow(window, monitor);
 
 	// Make the window's context current
 	glfwMakeContextCurrent(window);
@@ -294,6 +302,7 @@ int main()
 		lightingShader.SetFloat("pointLights[3].linear", 0.09);
 		lightingShader.SetFloat("pointLights[3].quadratic", 0.032);
 		// spotLight
+		lightingShader.SetBool("spotLight.useSpotlight", flashLightOn);
 		lightingShader.SetVec3("spotLight.position", camera.GetPosition());
 		lightingShader.SetVec3("spotLight.direction", camera.GetDirection());
 		lightingShader.SetVec3("spotLight.ambient", 0.0f, 0.0f, 0.0f);
@@ -312,6 +321,7 @@ int main()
 		lightingShader.SetMat4("view", view);
 
 		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 		lightingShader.SetMat4("model", model);
 
 		nanosuit.Draw(lightingShader);
@@ -439,5 +449,33 @@ void processInput(GLFWwindow* window)
 			camera.ProcessKeyboard(CameraMovement::UP, deltaTime);
 		if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
 			camera.ProcessKeyboard(CameraMovement::DOWN, deltaTime);
+
+		if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS && !flashLightKeyDown)
+		{
+			flashLightKeyDown = true;
+			flashLightOn = !flashLightOn;
+		}
+		if (glfwGetKey(window, GLFW_KEY_F) == GLFW_RELEASE && flashLightKeyDown)
+		{
+			flashLightKeyDown = false;
+		}
 	}
+}
+
+void CenterWindow(GLFWwindow* window, GLFWmonitor* monitor)
+{
+	if (!monitor)
+		return;
+
+	const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+	if (!mode)
+		return;
+
+	int monitorX, monitorY;
+	glfwGetMonitorPos(monitor, &monitorX, &monitorY);
+
+	int windowWidth, windowHeight;
+	glfwGetWindowSize(window, &windowWidth, &windowHeight);
+
+	glfwSetWindowPos(window, monitorX + (mode->width - windowWidth) / 2, monitorY + (mode->height - windowHeight) / 2);
 }
