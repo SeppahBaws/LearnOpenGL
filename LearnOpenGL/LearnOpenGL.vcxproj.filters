@@ -67,6 +67,8 @@
     <None Include="res\shaders\unlit_fragment.glsl" />
     <None Include="res\shaders\unlit_vertex.glsl" />
     <None Include="res\shaders\lit_vertex.glsl" />
+    <None Include="res\shaders\framebuffer_fragment.glsl" />
+    <None Include="res\shaders\framebuffer_vertex.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shader.h">

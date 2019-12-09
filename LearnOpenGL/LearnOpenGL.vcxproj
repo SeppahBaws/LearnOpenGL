@@ -108,6 +108,8 @@
     <ClCompile Include="Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="res\shaders\framebuffer_vertex.glsl" />
+    <None Include="res\shaders\framebuffer_fragment.glsl" />
     <None Include="res\shaders\light_fragment.glsl" />
     <None Include="res\shaders\lit_fragment.glsl" />
     <None Include="res\shaders\lit_vertex.glsl" />
