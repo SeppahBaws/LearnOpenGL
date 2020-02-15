@@ -62,15 +62,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\shaders\light_fragment.glsl" />
-    <None Include="res\shaders\lit_fragment.glsl" />
-    <None Include="res\shaders\unlit_fragment.glsl" />
-    <None Include="res\shaders\unlit_vertex.glsl" />
-    <None Include="res\shaders\lit_vertex.glsl" />
-    <None Include="res\shaders\framebuffer_fragment.glsl" />
-    <None Include="res\shaders\framebuffer_vertex.glsl" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="Shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -116,22 +107,5 @@
     <ClInclude Include="Model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="res\textures\container.jpg">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\textures\awesomeface.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\textures\wall.jpg">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\textures\container2.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\textures\container2_specular.png">
-      <Filter>Resource Files</Filter>
-    </Image>
   </ItemGroup>
 </Project>

@@ -108,15 +108,6 @@
     <ClCompile Include="Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\shaders\framebuffer_vertex.glsl" />
-    <None Include="res\shaders\framebuffer_fragment.glsl" />
-    <None Include="res\shaders\light_fragment.glsl" />
-    <None Include="res\shaders\lit_fragment.glsl" />
-    <None Include="res\shaders\lit_vertex.glsl" />
-    <None Include="res\shaders\unlit_fragment.glsl" />
-    <None Include="res\shaders\unlit_vertex.glsl" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="deps\imgui\imconfig.h" />
     <ClInclude Include="deps\imgui\imgui.h" />
@@ -132,13 +123,6 @@
     <ClInclude Include="Shader.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="Texture.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="res\textures\awesomeface.png" />
-    <Image Include="res\textures\container.jpg" />
-    <Image Include="res\textures\container2.png" />
-    <Image Include="res\textures\container2_specular.png" />
-    <Image Include="res\textures\wall.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
